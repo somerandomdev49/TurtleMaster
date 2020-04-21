@@ -1,0 +1,37 @@
+data:
+    str1=[string]Hello,\nWorld!
+    __font_size=$36
+    __speed=$7
+code:
+    circle:$100 
+    up:.
+    right:$90
+    forward:$200
+    left:$90
+    down:.
+
+    label:test-label
+
+    circle:$100
+
+    cond-jump:exit-label
+
+    up:.
+    left:$90
+    forward:$300
+    right:$90
+    movex:$-25
+    down:.
+
+    forward:$50
+    right:$90
+    forward:$25
+    right:$90
+    forward:$50
+    right:$90
+    forward:$25 
+    up:.
+
+    
+    goto:$0;$0
+    down:.

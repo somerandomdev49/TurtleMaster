@@ -1,0 +1,27 @@
+data:
+    i=$0
+    # __speed=$0
+code:
+    up:.
+    goto: $0;$-100
+    down:.
+    label:loop
+
+
+    expr:*;%i;$10
+    left: @
+
+    forward: $100
+    right: $90
+    forward: $100
+    right: $90
+    forward: $100
+    right: $90
+    forward: $100
+
+    heading: $0
+
+    expr:+;%i;$1
+    expr:set;=i;@
+    expr:<;%i;$5
+    cond-jump:loop
