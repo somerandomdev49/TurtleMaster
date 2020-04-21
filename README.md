@@ -43,7 +43,7 @@ expr:m;a;b sets @ to the result of evaluated expression, see expr command
 | `>; a; b  `    | `a > b      `     |
 | `<; a; b  `    | `a < b      `     |
 | `=; a; b  `    | `a == b     `     |
-| `|; a; b  `    | `a or b     `     |
+| `\|; a; b `    | `a or b     `     |
 | `&; a; b  `    | `a and b    `     |
 | `!; a     `    | `not a      `     |
 | `get; a   `    | `data[a]    `     |
