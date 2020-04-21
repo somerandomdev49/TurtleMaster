@@ -1,8 +1,7 @@
 import turtle as t
 import tkinter as tk
 import tkinter.simpledialog as tkmsgbox
-import sys
-import re
+import sys, re, os
 
 VERSION_MAJ = 2000
 VERSION_MIN = 200
@@ -34,7 +33,7 @@ def run(instructions_):
         # Ask for instructions.
         root = tk.Tk()
         root.withdraw()
-        path_str = tkmsgbox.askstring("Turtle Master " + str(VERSION_MAJ + VERSION_MIN), "Enter your code:")
+        path_str = tkmsgbox.askstring("[CODE-ONLY] Turtle Master " + str(VERSION_MAJ + VERSION_MIN), "Enter your code:")
         root.destroy()
 
         # Create all of the instructions.
@@ -199,14 +198,17 @@ def run(instructions_):
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == '--help':
         print("Usage:")
-        print("python", __file__, " --file <.tmi file>", "   ->   Run file")
-        print("python", __file__, " --help", "   ->   Show help (you are looking at it now)")
-        print("python", __file__, " --verion", "   ->   Display version")
+        print("python", __file__, " --file <.tmi file>",   "   ->   Run file")
+        print("python", __file__, " --help",               "   ->   Show help (you are looking at it now)")
+        print("python", __file__, " --verion",             "   ->   Display version")
 
     elif len(sys.argv) == 2 and sys.argv[1] == '--version':
         print("Turtle Master " + str(VERSION_MAJ + VERSION_MIN))
 
     elif len(sys.argv) == 3 and sys.argv[1] == '--file':
+        if not os.path.exists(sys.argv[2]):
+            print("No such file: " + sys.argv[2], file=sys.stderr)
+            exit(1)
         instruction_file = open(sys.argv[2], "r")
         code = instruction_file.read()
         run(code)
