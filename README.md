@@ -1,5 +1,7 @@
 # Turtle Master 2200
 
+(This is not at all supposed to be nice python code, I just did the IT homeework in an ugly way)
+
 To get help for the command line interface: `python main.py help`
 
 ## Values:
