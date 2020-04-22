@@ -6,10 +6,23 @@ import sys, re, os
 VERSION_MAJ = 2000
 VERSION_MIN = 200
 
+class Stack:
+    def __init__(self):
+        self.__list = []
+    def push(self, e):
+        self.__list.append(e)
+    def top(self):
+        return self.__list[len(self.__list)-1]
+    def pop(self):
+        t = top()
+        self.__list.pop()
+        return t
+
 # Main function.
 def run(instructions_):
     data = {}
     instructions = []
+    stack = Stack()
 
     def run_arg(arg):
         if arg[0:len("[string]")] == '[string]':
@@ -25,8 +38,8 @@ def run(instructions_):
             return data[arg[1:]]
         elif arg[0] == '$': return float(arg[1:])
         elif arg[0] == '=': return arg[1:]
-        elif arg[0] == '@': return data[" "]
-        else: raise KeyError("No such prefix: " + arg[0])
+        elif arg[0] == '@': return stack.top()
+        else: raise KeyError("Unknown value type: " + arg[0])
     
     # If no file provided, ask user for the instructions
     if instructions_ is None:
@@ -69,7 +82,7 @@ def run(instructions_):
     # Create a turtle.
     pen = t.Pen()
 
-    data[' '] = False
+    stack.push(False)
 
     if '__speed' in data: pen.speed(float(data['__speed']))
 
@@ -157,32 +170,31 @@ def run(instructions_):
         elif command == 'label': pass
 
         elif command == 'cond-jump':
-            if data[" "]: instr_idx = labels[argument.strip()] - 1
+            if stack.top(): instr_idx = labels[argument.strip()] - 1
+
+        elif command == 'set':
+            bits = argument.strip().split(";")
+            data[run_arg(bits[0].strip())] = run_arg(bits[1].strip())
+
+        elif command == 'get':
+            stack.push(data[run_arg(argument.strip())])
 
         elif command == 'expr':
-            bits = argument.split(";")
-            method = bits[0].strip()
-            a = run_arg(bits[1])
-            b = None
-            if len(bits[2].strip()) != 0: b = run_arg(bits[2])
+            if   argument == '>': data.push(data.pop() > data.pop())
+            elif argument == '<': data.push(data.pop() < data.pop())
+            elif argument == '=': data.push(data.pop() == data.pop())
+            elif argument == '|': data.push(data.pop() or data.pop())
+            elif argument == '&': data.push(data.pop() and data.pop())
+            elif argument == '!': data.push(not data.pop())
+            elif argument == 'dup': data.push(data.top())
 
-            if   method == '>': data[" "] = a > b
-            elif method == '<': data[" "] = a < b
-            elif method == '=': data[" "] = a == b
-            elif method == '|': data[" "] = a or b
-            elif method == '&': data[" "] = a and b
-            elif method == '!': data[" "] = not a
-
-            elif method == '+': data[" "] = a + b
-            elif method == '-': data[" "] = a - b
-            elif method == '*': data[" "] = a * b
-            elif method == '/': data[" "] = a / b
-
-            elif method == 'set': data[a] = b
-            elif method == 'get': data[" "] = a
+            elif argument == '+': data.push(data.pop() + data.pop())
+            elif argument == '-': data.push(data.pop() - data.pop())
+            elif argument == '*': data.push(data.pop() * data.pop())
+            elif argument == '/': data.push(data.pop() / data.pop())
 
             else:
-                print("No such method: '" + method + "', skipping (please note that the value is unchanged)", file=sys.stderr)
+                print("No such method: '" + argument + "', skipping (please note that the stack is unchanged)", file=sys.stderr)
 
         else:
             print("Warning! Unknown command '" + command + "', skipping", file=sys.stderr)

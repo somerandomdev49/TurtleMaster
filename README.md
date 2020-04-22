@@ -10,7 +10,7 @@ each value, string, anything (except for instruction names) is a value. And beca
  `%`        | data   | value of a data entry with a name
  `[string]` | string | string with `\n \r \t` escapes.
  `=`        | name   | returns the *name* of an entry
- `@`        | last   | no value, just the prefix, last compute value
+ `@`        | top    | no value, just the prefix, top of the stack
 
 ## Instruction set:
 ```
